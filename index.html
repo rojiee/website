@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FZ Mobile Accesories</title>
+
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/V5nGjVSX/logo-FZ.png">
+<link href="https://fonts.cdnfonts.com/css/animation" rel="stylesheet">
+             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-color: #f57224; /* Lazada Orange */
+            --secondary-color: #0f1568; /* Deep Blue */
+            --bg-color: #f5f5f5;
+            --white: #ffffff;
+            --text-dark: #212121;
+            --text-grey: #757575;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        
+        body { background-color: var(--bg-color); }
+
+        /* HEADER */
+        header {
+            background-color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+       .top-nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            text-decoration: none;
+            /* Prevent logo from shrinking on mobile */
+            flex-shrink: 0; 
+        }
+        .logo span { color: var(--primary-color); }
+
+        /* DESKTOP SEARCH BAR STYLES */
+        .search-bar {
+            flex: 1;
+            margin: 0 40px;
+            display: flex;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #eff0f5;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+            background: #eff0f5;
+        }
+
+        .search-bar button {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 0 20px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin-left: 10px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -10px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* --- NEW: MOBILE SEARCH STYLES (EXPANDABLE) --- */
+        /* Initially hidden on desktop */
+        .mobile-search-wrapper {
+            display: none; 
+            align-items: center;
+            margin: 0 10px;
+            position: relative;
+        }
+
+        .mobile-search-btn {
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* The hidden input that slides out */
+        .mobile-search-input {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            border: none;
+            border-bottom: 2px solid var(--primary-color);
+            outline: none;
+            position: absolute;
+            right: 40px; /* Position it to the left of the icon */
+            background: white;
+        }
+
+        .mobile-search-wrapper.active .mobile-search-input {
+            width: 150px; /* Width when expanded */
+            padding: 5px;
+        }
+
+
+        /* --- RESPONSIVE LOGIC (MEDIA QUERY) --- */
+        @media (max-width: 768px) {
+            
+            /* 1. Hide the big desktop search bar */
+            .desktop-only {
+                display: none !important;
+            }
+
+            /* 2. Show the mobile expandable search */
+            .mobile-search-wrapper {
+                display: flex;
+                margin-left: auto; /* Pushes it to the right near cart */
+            }
+
+            /* 3. Adjust spacing for small screens */
+            .top-nav {
+                padding: 10px 15px;
+            }
+            
+            .logo {
+                font-size: 20px;
+            }
+        }
+
+        /* HERO BANNER */
+        .hero {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: linear-gradient(90deg, #0f1568 0%, #1a237e 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* PRODUCT GRID */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain; /* Ensures image fits nicely */
+            background-color: #f9f9f9;
+            padding: 10px;
+        }
+
+        .product-info {
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-title {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            line-height: 1.4;
+            /* Limit to 2 lines */
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 18px;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-top: auto; /* Pushes price to bottom */
+        }
+
+        .old-price {
+            font-size: 12px;
+            color: var(--text-grey);
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+        .add-btn {
+            background: var(--white);
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* CART MODAL (Side Panel) */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px; /* Hidden by default */
+            width: 350px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+            transition: right 0.3s ease;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-modal.active { right: 0; }
+
+        .cart-header {
+            padding: 20px;
+            background: var(--secondary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-cart { cursor: pointer; font-size: 20px; }
+
+        .cart-items {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .cart-item-info h4 { font-size: 14px; margin-bottom: 5px; }
+        .cart-item-info p { color: var(--primary-color); font-weight: bold; }
+        
+        .remove-item {
+            color: red;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #f9f9f9;
+        }
+
+        .total-price {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Overlay for cart */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 150;
+            display: none;
+        }
+        .overlay.active { display: block; }
+
+        /* Notification Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 300;
+        }
+
+/* This hides the element on screens smaller than 768px */
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+}
+
+/* SLIDER STYLES */
+        .hero-slider {
+            max-width: 1200px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden; /* Keeps it neat */
+            border-radius: 8px;
+        }
+
+        .hero.slide {
+            display: none; /* Hide all slides by default */
+            /* Ensure the slide looks like your original hero */
+            padding: 40px;
+            color: white;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeEffect 1s; /* Smooth fade in */
+        }
+
+        /* Only show the one with the 'active' class */
+        .hero.slide.active {
+            display: flex;
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeEffect {
+            from {opacity: 0.4;}
+            to {opacity: 1;}
+        }
+
+
+
+
+
+
+/* --- Footer Container --- */
+.site-footer {
+    background-color: #2f3640; /* Dark Grey background */
+    color: #f5f6fa;            /* White text */
+    padding-top: 50px;
+    font-family: sans-serif;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- Columns --- */
+.footer-col {
+    flex: 1;             /* Each column takes equal space */
+    min-width: 250px;    /* Prevents them from getting too squashed */
+    margin-bottom: 30px;
+}
+
+.footer-col h3 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.footer-col h3 span {
+    color: #e84118; /* Accent color for 'Gadget' */
+}
+
+.footer-col h4 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+/* Adds a small underline to headings */
+.footer-col h4::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: #e84118;
+    height: 2px;
+    width: 50px;
+}
+
+/* --- Links Styling --- */
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+}
+
+.footer-col ul li a {
+    color: #dcdde1;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-col ul li a:hover {
+    color: #e84118;
+    padding-left: 5px; /* Subtle slide effect on hover */
+}
+
+/* --- Social Icons --- */
+.social-links a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: #353b48;
+    color: #fff;
+    margin-right: 10px;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.social-links a:hover {
+    background: #e84118;
+    transform: translateY(-3px); /* Bounces up slightly */
+}
+
+/* --- Copyright Bar --- */
+.footer-bottom {
+    background-color: #1e272e;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #7f8fa6;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column; /* Stacks columns vertically */
+    }
+    
+    .footer-col {
+        margin-bottom: 30px;
+        min-width: 100%;
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header>
+     <div class="top-nav">
+            <a href="#" class="logo">FZ<span>Accessories</span></a>
+            
+            <div class="search-bar desktop-only">
+                <input type="text" id="searchInput" placeholder="Search in PhoneGadget...">
+                <button onclick="searchProducts()">SEARCH</button>
+            </div>
+
+            <div class="mobile-search-wrapper" id="mobileSearch">
+                <input type="text" class="mobile-search-input" id="mobileInput" placeholder="Search...">
+                <button class="mobile-search-btn" onclick="toggleMobileSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+   <div class="hero-slider">
+        
+        <div class="hero slide active" style="background: linear-gradient(90deg, #0f1568 0%, #1a237e 100%);">
+            <div>
+                <h1>Mega Sale 50% OFF</h1>
+                <p>Upgrade your phone style today. Free shipping over RM15.</p>
+            </div>
+            <button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button>
+        </div>
+
+        <div class="hero slide" style="background: linear-gradient(90deg, #111111 0%, #2e7d32 100%);">
+            <div>
+                <h1>New Gaming Gear</h1>
+                <p>Cooling fans & triggers just landed. Level up now!</p>
+            </div>
+            <button onclick="document.getElementById('products').scrollIntoView()" style="background: #2e7d32;">Check It Out</button>
+        </div>
+
+        <div class="hero slide" style="background: linear-gradient(90deg, #c62828 0%, #ad1457 100%);">
+            <div>
+                <h1>Buy 2 Get 1 Free</h1>
+                <p>Limited time offer on all screen protectors & cables.</p>
+            </div>
+            <button onclick="document.getElementById('products').scrollIntoView()" style="background: #ffeb3b; color: #c62828;">Claim Offer</button>
+        </div>
+
+    </div>
+
+    <div class="container" id="products">
+        <h2 class="section-title">Just For You</h2>
+        <div class="product-grid" id="productGrid">
+            </div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">✕</span>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align:center; margin-top: 20px; color:#777;">Your cart is empty.</p>
+        </div>
+        <div class="cart-footer">
+            <div class="total-price">
+                <span>Total:</span>
+                <span id="cartTotal">RM 0.00</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">CHECKOUT NOW</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">Item added to cart!</div>
+
+
+
+<footer class="site-footer">
+    <div class="footer-container">
+        
+        <div class="footer-col">
+            <h3>FZ<span>Accessories</span></h3>
+            <p>Your one-stop shop for the latest smartphones and accessories. Quality guaranteed.</p>
+        </div>
+
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop All</a></li>
+                <li><a href="#">New Arrivals</a></li>
+                <li><a href="#">Track Order</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul>
+                <li><i class="fa-solid fa-location-dot"></i> Kuala Lumpur, Malaysia</li>
+                <li><i class="fa-solid fa-phone"></i> +60 11-1789 9917</li>
+                <li><i class="fa-solid fa-envelope"></i> fzmobileaccessories2@gmail.com</li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Follow Us</h4>
+            <div class="social-links">
+                <a href="https://www.facebook.com/profile.php?id=61583877767629"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/fzmo.bile"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@fz.mobile.accesso"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://wa.me/601117899917"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 FZAccessories. All rights reserved.</p>
+    </div>
+</footer>
+
+   <script>
+    /* --- JAVASCRIPT --- */
+
+    // 1. Product Data (Simulated Database)
+    const products = [
+        { id: 1, name: "Transparent Shockproof Case (iPhone 15)", price: 12.50, oldPrice: 25.00, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjO6OwlijA1JDbcDxeKA1Cr7lBFXUrgucdgQ&s" },
+        { id: 2, name: "20W Fast Charger Adapter USB-C", price: 29.90, oldPrice: 45.00, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt_eZHU26-z_oaj5OyAjszXZs0K7x1iYhOHQ&s" },
+        { id: 3, name: "9H Tempered Glass Screen Protector", price: 5.90, oldPrice: 10.00, img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2huaNYWtzJkHL_rkofOFjogblRY36fu4nEg&s" },
+        { id: 4, name: "Wireless Earbuds Bluetooth 5.3", price: 59.00, oldPrice: 120.00, img: "https://cdn.pixabay.com/photo/2022/02/20/08/54/earbuds-7023995_1280.jpg" },
+        { id: 5, name: "Magnetic Car Phone Holder", price: 18.00, oldPrice: 30.00, img: "https://i5.walmartimages.com/seo/AUKEY-Phone-Holder-for-Car-360-Degrees-Phone-Mount-HD-C49-Black_7c5f3857-c3ea-4967-a2f2-87a7db9151e4.373c7b73a5ffb910705518b6f98938e7.jpeg" },
+        { id: 6, name: "Braided USB-C Cable (2 Meter)", price: 15.00, oldPrice: 22.00, img: "https://cdn.pixabay.com/photo/2017/05/24/21/33/lightning-2341641_1280.jpg" },
+        { id: 7, name: "Gaming Finger Sleeves (Pair)", price: 3.50, oldPrice: 8.00, img: "https://cdn1.npcdn.net/images/1027a9ab6e82be0c1ac29dcd47044740_1713428585.webp?md5id=60a5a506e99d3b76a199c91aaf28c181&new_width=1000&new_height=1000&w=1719677235&from=png&type=9" },
+        { id: 8, name: "Power Bank 10,000mAh Slim", price: 45.00, oldPrice: 89.00, img: "https://cdn.pixabay.com/photo/2015/11/18/17/55/battery-1049668_1280.jpg" },
+    ];
+
+    // 2. Initialize Cart
+    let cart = JSON.parse(localStorage.getItem('myCart')) || [];
+
+    // 3. Render Products
+    function renderProducts(items) {
+        const grid = document.getElementById('productGrid');
+        if(items.length === 0) {
+            grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No products found.</p>';
+            return;
+        }
+        grid.innerHTML = items.map(product => `
+            <div class="product-card">
+                <img src="${product.img}" alt="${product.name}" class="product-img">
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="price-container">
+                        <span class="product-price">RM ${product.price.toFixed(2)}</span>
+                        <span class="old-price">RM ${product.oldPrice.toFixed(2)}</span>
+                    </div>
+                    <button class="add-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // 4. Unified Search System (Desktop & Mobile)
+    function performSearch(query) {
+        if (!query) {
+            // If empty search, show all products
+            renderProducts(products);
+            return;
+        }
+
+        const lowerQuery = query.toLowerCase();
+        const filtered = products.filter(p => p.name.toLowerCase().includes(lowerQuery));
+        renderProducts(filtered);
+    }
+
+    // Desktop Search Trigger
+    function searchProducts() { 
+        const desktopQuery = document.getElementById('searchInput').value;
+        performSearch(desktopQuery);
+    }
+
+    // Desktop "Enter" Key Listener
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+        if(e.key === 'Enter') searchProducts();
+    });
+
+    // Mobile Search Logic
+    const mobileInput = document.getElementById('mobileInput');
+    const mobileWrapper = document.getElementById('mobileSearch');
+
+    function toggleMobileSearch() {
+        // If open AND has text, search!
+        if (mobileWrapper.classList.contains('active') && mobileInput.value.trim() !== "") {
+            performSearch(mobileInput.value); 
+            return; 
+        }
+        
+        // Otherwise, just toggle visibility
+        mobileWrapper.classList.toggle('active');
+        if (mobileWrapper.classList.contains('active')) {
+            mobileInput.focus();
+        }
+    }
+
+    // Mobile "Enter" Key Listener
+    mobileInput.addEventListener('keyup', function(e) {
+        if (e.key === 'Enter') performSearch(mobileInput.value);
+    });
+
+
+    // 5. Cart Functions
+    function addToCart(id) {
+        const product = products.find(p => p.id === id);
+        const existingItem = cart.find(item => item.id === id);
+
+        if (existingItem) {
+            existingItem.qty++;
+        } else {
+            cart.push({ ...product, qty: 1 });
+        }
+
+        saveCart();
+        updateCartUI();
+        showToast("Item added successfully!");
+    }
+
+    function removeFromCart(id) {
+        cart = cart.filter(item => item.id !== id);
+        saveCart();
+        updateCartUI();
+    }
+
+    function saveCart() {
+        localStorage.setItem('myCart', JSON.stringify(cart));
+    }
+
+    function toggleCart() {
+        document.getElementById('cartModal').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
+    function updateCartUI() {
+        const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+        document.getElementById('cartCount').innerText = totalQty;
+
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotalEl = document.getElementById('cartTotal');
+        
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<p style="text-align:center; margin-top: 20px; color:#777;">Your cart is empty.</p>';
+            cartTotalEl.innerText = "RM 0.00";
+            return;
+        }
+
+        let totalPrice = 0;
+        cartItemsContainer.innerHTML = cart.map(item => {
+            totalPrice += item.price * item.qty;
+            return `
+            <div class="cart-item">
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>RM ${item.price.toFixed(2)} x ${item.qty}</p>
+                    <span class="remove-item" onclick="removeFromCart(${item.id})">Remove</span>
+                </div>
+                <div>RM ${(item.price * item.qty).toFixed(2)}</div>
+            </div>
+            `;
+        }).join('');
+
+        cartTotalEl.innerText = "RM " + totalPrice.toFixed(2);
+    }
+
+    // 6. Checkout
+  // 6. Checkout
+function checkout() {
+    if (cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // 1. Calculate the total (same as before)
+    const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+    // 2. Build the message string
+    // Start with a greeting
+    let message = "Hi PhoneGadget, I would like to place an order:\n\n";
+
+    // Loop through the cart to list items
+    cart.forEach((item, index) => {
+        // Example: 1. iPhone 13 x1 - RM 3000.00
+        // Make sure your cart objects have a 'name' property!
+        message += `${index + 1}. ${item.name} (x${item.qty}) - RM ${(item.price * item.qty).toFixed(2)}\n`;
+    });
+
+    // Add the final total at the bottom
+    message += `\n*Total to pay: RM ${total.toFixed(2)}*`;
+
+    // 3. Create the WhatsApp Link
+    // Phone number format: Country code + Number (No spaces, no '+', no dashes)
+    const phoneNumber = "601117899917"; 
+    
+    // encodeURIComponent converts spaces and enters into URL-safe characters (%20, %0A)
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+
+    // 4. Open WhatsApp in a new tab
+    window.open(url, '_blank');
+}
+
+    // 7. Toast Notification
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.innerText = message;
+        toast.style.opacity = 1;
+        setTimeout(() => { toast.style.opacity = 0; }, 2000);
+    }
+
+    // Initial Render
+    renderProducts(products);
+    updateCartUI();
+
+
+// --- NEW: Reset Grid When Input is Cleared ---
+
+    // 1. For Desktop Search
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        // If the text box is empty...
+        if (e.target.value.trim() === "") {
+            renderProducts(products); // Show all products again
+        }
+    });
+
+    // 2. For Mobile Search
+    document.getElementById('mobileInput').addEventListener('input', function(e) {
+        // If the text box is empty...
+        if (e.target.value.trim() === "") {
+            renderProducts(products); // Show all products again
+        }
+    });
+
+
+
+
+/* carousel */
+
+/* --- HERO SLIDER LOGIC --- */
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero.slide');
+
+    function showSlides() {
+        // 1. Hide all slides
+        slides.forEach(slide => {
+            slide.classList.remove('active');
+        });
+
+        // 2. Increment counter (loop back to 0 if at end)
+        currentSlide++;
+        if (currentSlide > slides.length) { currentSlide = 1 }
+
+        // 3. Show the new current slide
+        slides[currentSlide - 1].classList.add('active');
+        
+        // 4. Repeat every 4 seconds
+        setTimeout(showSlides, 4000); 
+    }
+
+    // Start the slideshow immediately
+    showSlides();
+
+</script>
+
+</body>
+</html>
